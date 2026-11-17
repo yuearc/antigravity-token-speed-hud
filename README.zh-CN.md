@@ -48,8 +48,8 @@ antigravity-telemetry-hud/
 │                   ├── index.html         # HUD 页面骨架
 │                   ├── styles.css         # 主题自适应（Host CSS Variables）样式
 │                   └── app.js             # Keyed DOM 同步、数字缓动与 Canvas 图表
-├── install-global.ps1                     # Windows 全局安装脚本
-├── install-global.sh                      # macOS / Linux 全局安装脚本
+├── install-global.ps1                     # Windows 全局安装脚本（已验证）
+├── install-global.sh                      # macOS 全局安装脚本（待后续验证）
 ├── .gitignore
 ├── .gitattributes
 ├── LICENSE                                # MIT License
@@ -61,20 +61,31 @@ antigravity-telemetry-hud/
 
 ## 安装与使用
 
-### 前置条件
+### 平台支持与前置条件
 - 已安装 **Antigravity**（内置 `sidecar_sdk` 运行时）。
-- 如需完整的即时 `Stop` Hook 取消检测，目前开箱脚本适配 Windows（PowerShell）；macOS / Linux 下仍可使用 60 秒静默超时兜底与历史取消识别。
+- **Windows**：已完整验证可用（全局安装脚本、插件识别、`Stop` Hook 取消检测均已实测通过）。
+- **macOS**：已提供安装脚本（[install-global.sh](install-global.sh)），**待后续在 macOS 环境单独验证**（验证完成前默认依赖 60 秒静默超时兜底）。
 
-### 方式 1：克隆后安装为全局插件（推荐，所有项目可用）
+### 方式 1：直接发给你的 Antigravity 安装（最推荐）
 
-**Windows (PowerShell):**
+不用手动折腾命令行——**直接把这个 GitHub 仓库地址发给你的 Antigravity**，让它自动帮你完成克隆与安装即可：
+
+```text
+帮我安装这个 Antigravity 插件仓库：https://github.com/yuearc/antigravity-telemetry-hud
+```
+
+Antigravity 会自动拉取仓库并安装到 `~/.gemini/config/plugins/telemetry-hud/`，随后给出启用入口与侧边栏面板入口，点击启用 **Antigravity Telemetry HUD (`telemetry-hud`)** 即可使用。
+
+### 方式 2：手动运行脚本全局安装（所有项目可用）
+
+**Windows (PowerShell，已验证):**
 ```powershell
 git clone https://github.com/yuearc/antigravity-telemetry-hud.git
 cd antigravity-telemetry-hud
 .\install-global.ps1
 ```
 
-**macOS / Linux:**
+**macOS（待后续验证）:**
 ```bash
 git clone https://github.com/yuearc/antigravity-telemetry-hud.git
 cd antigravity-telemetry-hud
@@ -82,11 +93,11 @@ chmod +x install-global.sh
 ./install-global.sh
 ```
 
-脚本会将插件安装到 `~/.gemini/config/plugins/telemetry-hud/`。随后：
+安装完成后：
 1. 在 Antigravity 中打开 **Customizations / Plugins** 页面，确认 **Antigravity Telemetry HUD (`telemetry-hud`)** 已开启。
 2. 点击右侧辅助面板（Auxiliary Pane）右上角 **`+`** 菜单，选择 **Token & Speed HUD**。
 
-### 方式 2：作为单工作区插件试用
+### 方式 3：作为单工作区插件试用
 1. 在 Antigravity 中直接将克隆下来的 `antigravity-telemetry-hud` 目录打开为当前工作区（Workspace）。
 2. 在插件列表中启用 **`telemetry-hud`**。
 3. 从右侧辅助面板 **`+`** 菜单打开 **Token & Speed HUD**。

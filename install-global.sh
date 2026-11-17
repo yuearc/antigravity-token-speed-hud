@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# macOS global installer for Antigravity Telemetry HUD (pending macOS verification)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_SRC="$SCRIPT_DIR/.agents/plugins/telemetry-hud"
 GLOBAL_DIR="${HOME}/.gemini/config/plugins/telemetry-hud"

@@ -48,8 +48,8 @@ antigravity-telemetry-hud/
 │                   ├── index.html         # HUD document shell
 │                   ├── styles.css         # Host-theme-adaptive CSS variables styling
 │                   └── app.js             # Keyed DOM reconciliation, numeric tweening & Canvas chart
-├── install-global.ps1                     # Windows global installer
-├── install-global.sh                      # macOS / Linux global installer
+├── install-global.ps1                     # Windows global installer (verified)
+├── install-global.sh                      # macOS global installer (pending verification)
 ├── .gitignore
 ├── .gitattributes
 ├── LICENSE                                # MIT License
@@ -61,20 +61,31 @@ antigravity-telemetry-hud/
 
 ## Installation & Usage
 
-### Prerequisites
+### Platform Support & Prerequisites
 - **Antigravity** installed (provides the built-in `sidecar_sdk` runtime).
-- Out-of-the-box instant `Stop` hook tracking uses PowerShell on Windows; macOS / Linux installations fall back cleanly to the built-in `60s` inactivity detection and historical cancellation labeling.
+- **Windows**: End-to-end verified (global installation, live plugin discovery, Sidecar HUD, and native `Stop` hook cancellation detection).
+- **macOS**: Installer script provided ([install-global.sh](install-global.sh)); **standalone macOS verification is upcoming** (uses `60s` inactivity fallback until a macOS `Stop` hook script is verified).
 
-### Option 1: Install Globally (Recommended, Available Across All Projects)
+### Option 1: Send Directly to Antigravity (Recommended)
 
-**Windows (PowerShell):**
+The easiest way to install is to send this repository URL directly to your **Antigravity** chat and let it install the plugin for you automatically:
+
+```text
+Help me install this Antigravity plugin repository: https://github.com/yuearc/antigravity-telemetry-hud
+```
+
+Antigravity will clone the repository, install `telemetry-hud` to `~/.gemini/config/plugins/telemetry-hud/`, and give you a one-click entry to enable **Antigravity Telemetry HUD (`telemetry-hud`)** and open **Token & Speed HUD**.
+
+### Option 2: Manual Global Installation
+
+**Windows (PowerShell, verified):**
 ```powershell
 git clone https://github.com/yuearc/antigravity-telemetry-hud.git
 cd antigravity-telemetry-hud
 .\install-global.ps1
 ```
 
-**macOS / Linux:**
+**macOS (upcoming verification):**
 ```bash
 git clone https://github.com/yuearc/antigravity-telemetry-hud.git
 cd antigravity-telemetry-hud
@@ -82,11 +93,11 @@ chmod +x install-global.sh
 ./install-global.sh
 ```
 
-The installer copies the plugin into `~/.gemini/config/plugins/telemetry-hud/`. Next:
+After running the script:
 1. Open **Customizations / Plugins** in Antigravity and ensure **Antigravity Telemetry HUD (`telemetry-hud`)** is enabled.
 2. Open the **`+`** menu in the right-hand Auxiliary Pane and select **Token & Speed HUD**.
 
-### Option 2: Load as a Workspace Plugin
+### Option 3: Load as a Workspace Plugin
 1. Open the cloned `antigravity-telemetry-hud` directory directly as a Workspace in Antigravity.
 2. Enable **`telemetry-hud`** in the Plugins list.
 3. Open **Token & Speed HUD** from the Auxiliary Pane **`+`** menu.
