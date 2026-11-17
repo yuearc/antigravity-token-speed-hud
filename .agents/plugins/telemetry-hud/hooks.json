@@ -1,0 +1,11 @@
+{
+  "telemetry-hud-stop-tracker": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ./scripts/stop-state.ps1",
+        "timeout": 5
+      }
+    ]
+  }
+}

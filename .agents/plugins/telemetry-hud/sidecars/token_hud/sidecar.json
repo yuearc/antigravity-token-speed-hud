@@ -1,0 +1,21 @@
+{
+  "command": "node",
+  "args": ["main.mjs"],
+  "restart_policy": "always",
+  "display_name": "Token & Speed HUD",
+  "description": "Real-time telemetry panel and bottom status bar showing token counts, output speed (tok/s), cache hit rate, and context pressure.",
+  "has_web_ui": true,
+  "agent_permissions": {
+    "allows_user_interactions": true
+  },
+  "ui_config": {
+    "display_name": "Token & Speed HUD",
+    "views": [
+      {
+        "path": "/",
+        "entrypoint": "SIDECAR_UI_ENTRYPOINT_AUX_PANE",
+        "title": "Token & Speed HUD"
+      }
+    ]
+  }
+}

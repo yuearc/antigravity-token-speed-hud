@@ -1,0 +1,6 @@
+{
+  "name": "token_hud",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Real-time token and output speed HUD sidecar for Antigravity"
+}

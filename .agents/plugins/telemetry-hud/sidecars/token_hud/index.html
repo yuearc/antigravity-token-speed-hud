@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Token &amp; Speed HUD</title>
+  <script src="/preload.js"></script>
+  <link rel="stylesheet" href="/styles.css?v=20261118-4" />
+</head>
+<body>
+  <div class="shell">
+    <!-- Top Header -->
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <span id="live-dot" class="live-dot" aria-hidden="true"></span>
+          <h1 class="title">Token &amp; Speed HUD</h1>
+        </div>
+        <div class="header-meta">
+          <span id="conv-id-tag" class="conv-tag mono hidden" title="当前锁定会话"></span>
+          <span id="live-badge" class="status-label mono">WAITING</span>
+        </div>
+      </div>
+      <div id="conv-snippet" class="snippet">正在等待绑定当前对话…</div>
+    </header>
+
+    <!-- Main Scrollable Telemetry Area -->
+    <main class="main">
+      <!-- KPI Grid -->
+      <section class="kpi-grid" aria-label="核心指标">
+        <div class="card">
+          <div class="card-label">
+            <span>输出速度</span>
+            <span class="unit mono">tok/s</span>
+          </div>
+          <div class="card-value primary mono" id="kpi-speed">--</div>
+          <div class="card-sub mono" id="kpi-speed-sub">avg -- · peak --</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            <span>缓存命中率</span>
+            <span class="unit mono success" id="kpi-cache-pct">--%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill success" id="kpi-cache-bar"></div></div>
+          <div class="card-sub mono" id="kpi-cache-sub">-- / --</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            <span>累计 Token</span>
+            <span class="unit mono" id="kpi-steps">-- turns · -- steps</span>
+          </div>
+          <div class="card-value mono" id="kpi-out">--</div>
+          <div class="card-sub mono" id="kpi-in">in -- · cache --</div>
+        </div>
+
+        <div class="card card-ctx" id="card-ctx">
+          <div class="card-label">
+            <span>上下文压力</span>
+            <div class="ctx-right-meta">
+              <span class="unit mono" id="kpi-ctx-pct">--%</span>
+              <button id="ctx-toggle" type="button" class="limit-pill mono" title="切换上下文窗口上限 (200K / 1M)">/ 1M</button>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill normal" id="kpi-ctx-bar"></div></div>
+          <div class="ctx-footer">
+            <span class="card-sub mono" id="kpi-ctx-sub">-- / 1.0M</span>
+            <button id="compact-btn" type="button" class="compact-btn" title="点击复制 /compact 到剪贴板，在聊天输入框粘贴发送即可压缩上下文">
+              <svg class="compact-icon" width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2.5 5.5h3.5V2M13.5 10.5H10V14M6 6L2.2 2.2M10 10l3.8 3.8M13.5 5.5H10V2M2.5 10.5H6V14"/>
+              </svg>
+              <span id="compact-label">压缩上下文</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Speed & Cache Trend Chart -->
+      <section class="panel chart-panel">
+        <div class="panel-head">
+          <span class="panel-title">步级输出速率 (tok/s) 与缓存命中趋势 <span class="muted">· 点击蓝色柱跳转对应对话</span></span>
+          <span class="mono muted panel-meta" id="chart-meta">--</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="trend-canvas" class="trend-canvas" height="114"></canvas>
+          <div id="chart-tooltip" class="chart-tooltip" role="tooltip"></div>
+        </div>
+      </section>
+
+      <!-- Chained Calls by User Turn / Flat Table -->
+      <section class="panel">
+        <div class="panel-head">
+          <div class="view-tabs" role="tablist" aria-label="视图切换">
+            <button id="view-turns" type="button" class="view-tab active" role="tab" aria-selected="true" data-view="turns">链式对话详情</button>
+            <button id="view-flat" type="button" class="view-tab" role="tab" aria-selected="false" data-view="flat">全量步级表</button>
+          </div>
+          <div class="panel-actions">
+            <button id="expand-all-btn" type="button" class="mini-btn">全部展开</button>
+            <button id="collapse-all-btn" type="button" class="mini-btn">全部收起</button>
+          </div>
+        </div>
+
+        <!-- Turn-by-Turn Chained Call Tree -->
+        <div id="turns-container" class="turns-list"></div>
+
+        <!-- Flat Step Table -->
+        <div id="flat-container" class="table-wrap hidden">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>所属对话</th>
+                <th>Step</th>
+                <th>思考 / 工具 / 动作</th>
+                <th class="num">新输入</th>
+                <th class="num">缓存</th>
+                <th class="num">输出</th>
+                <th class="num">耗时</th>
+                <th class="num">tok/s</th>
+              </tr>
+            </thead>
+            <tbody id="steps-body" class="mono"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Fixed Bottom Telemetry Status Bar -->
+    <footer class="hud-bar mono" aria-label="底部状态栏">
+      <div class="hud-group">
+        <span id="hud-state" class="hud-live">○ IDLE</span>
+        <span class="sep" aria-hidden="true">|</span>
+        <span>In: <strong id="hud-in">--</strong></span>
+        <span>Cache: <strong id="hud-cache" class="success">--</strong></span>
+        <span>Out: <strong id="hud-out">--</strong></span>
+      </div>
+      <div class="hud-group">
+        <span class="hud-speed primary" id="hud-speed">
+          <svg class="bolt-icon" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M9.5 1.5 3.5 9h4.2l-1.2 5.5L12.5 7H8.3l1.2-5.5Z"/>
+          </svg>
+          <span id="hud-speed-val">-- tok/s</span>
+        </span>
+        <span class="sep" aria-hidden="true">|</span>
+        <span>Saved: <strong id="hud-saved" class="success">--%</strong></span>
+      </div>
+    </footer>
+    <div id="hud-toast" class="hud-toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="/app.js?v=20261118-4"></script>
+</body>
+</html>

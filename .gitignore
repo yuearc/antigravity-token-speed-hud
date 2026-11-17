@@ -1,0 +1,17 @@
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Runtime / Node / Sidecar transient data
+node_modules/
+npm-debug.log*
+*.log
+.env
+.env.*
+plugin_data/
+sidecar_data/
