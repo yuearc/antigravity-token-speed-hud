@@ -1,5 +1,5 @@
 /**
- * Antigravity Telemetry HUD Sidecar Backend.
+ * Token & Speed Sidecar Backend for Antigravity.
  *
  * Read-only sidecar that reads local Antigravity conversation transcripts:
  *   <appData>/brain/<conversationId>/.system_generated/logs/transcript.jsonl
@@ -76,9 +76,9 @@ function readStopState(conv, appData) {
   if (!conv || !ID_RE.test(conv)) return null;
   const candidates = [];
   if (process.env.PLUGIN_DATA) candidates.push(join(process.env.PLUGIN_DATA, `${conv}.json`));
-  if (appData) candidates.push(join(appData, 'plugin_data', 'telemetry-hud', `${conv}.json`));
+  if (appData) candidates.push(join(appData, 'plugin_data', 'token-speed', `${conv}.json`));
   for (const dir of findAppDataDirs()) {
-    const p = join(dir, 'plugin_data', 'telemetry-hud', `${conv}.json`);
+    const p = join(dir, 'plugin_data', 'token-speed', `${conv}.json`);
     if (!candidates.includes(p)) candidates.push(p);
   }
   let newest = null;

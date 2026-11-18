@@ -1,5 +1,5 @@
 {
-  "telemetry-hud-stop-tracker": {
+  "token-speed-stop-tracker": {
     "Stop": [
       {
         "type": "command",

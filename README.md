@@ -1,13 +1,13 @@
-# Antigravity Telemetry HUD (`telemetry-hud`)
+# Token & Speed (`token-speed`)
 
 **English** | [简体中文](README.zh-CN.md)
 
 A lightweight, zero-external-dependency real-time performance and token telemetry sidecar plugin for **Google Antigravity**. Built around high-density observability and Linear / Langfuse trace card conventions, it surfaces live generation throughput (`tok/s`), Prefix Cache hit rate, context pressure, and per-turn chained tool-call breakdowns.
 
 <p align="center">
-  <img src="docs/preview-dark.png" alt="Antigravity Telemetry HUD Dark Mode" width="46%" />
+  <img src="docs/preview-dark.png" alt="Token & Speed Dark Mode" width="46%" />
   &nbsp;&nbsp;
-  <img src="docs/preview-light.png" alt="Antigravity Telemetry HUD Light Mode" width="46%" />
+  <img src="docs/preview-light.png" alt="Token & Speed Light Mode" width="46%" />
 </p>
 
 ---
@@ -27,19 +27,19 @@ A lightweight, zero-external-dependency real-time performance and token telemetr
   - **Semantic Status Cards**: Step cards use 3px left status rails and soft category pills to distinguish intermediate tool steps, final replies, wait-for-input steps, errors, and tool categories (read/search, edit/write, command execution, web lookup).
 - **Instant Cancellation Detection & Strict Single-Conversation Lock**
   - Strictly locks telemetry to the active Antigravity conversation (`conversationId`), never mixing transcripts from other sessions.
-  - Combines a native `Stop` hook ([hooks.json](.agents/plugins/telemetry-hud/hooks.json)) with a `60s` silence staleness fallback so canceling a response (`USER_CANCELED`) or interrupting a tool chain immediately transitions the HUD to `CANCELLED` / `IDLE` instead of hanging on waiting.
+  - Combines a native `Stop` hook ([hooks.json](.agents/plugins/token-speed/hooks.json)) with a `60s` silence staleness fallback so canceling a response (`USER_CANCELED`) or interrupting a tool chain immediately transitions the HUD to `CANCELLED` / `IDLE` instead of hanging on waiting.
 - **100% Local Read-Only Privacy**
-  - Reads only local Antigravity `transcript.jsonl` logs and plugin state under `plugin_data/telemetry-hud/<conv>.json`—**zero outbound network calls** and **zero external CDN scripts or fonts**.
+  - Reads only local Antigravity `transcript.jsonl` logs and plugin state under `plugin_data/token-speed/<conv>.json`—**zero outbound network calls** and **zero external CDN scripts or fonts**.
 
 ---
 
 ## Repository Structure
 
 ```text
-antigravity-telemetry-hud/
+antigravity-token-speed-hud/
 ├── .agents/
 │   └── plugins/
-│       └── telemetry-hud/
+│       └── token-speed/
 │           ├── plugin.json                # Plugin manifest
 │           ├── hooks.json                 # Antigravity Stop hook config (instant cancel detection)
 │           ├── assets/
@@ -80,35 +80,35 @@ antigravity-telemetry-hud/
 The easiest way to install is to send this repository URL directly to your **Antigravity** chat and let it install the plugin for you automatically:
 
 ```text
-Help me install this Antigravity plugin repository: https://github.com/yuearc/antigravity-telemetry-hud
+Help me install this Antigravity plugin repository: https://github.com/yuearc/antigravity-token-speed-hud
 ```
 
-Antigravity will clone the repository, install `telemetry-hud` to `~/.gemini/config/plugins/telemetry-hud/`, and give you a one-click entry to enable **Antigravity Telemetry HUD (`telemetry-hud`)** and open **Token & Speed HUD**.
+Antigravity will clone the repository, install `token-speed` to `~/.gemini/config/plugins/token-speed/`, and give you a one-click entry to enable **Token & Speed (`token-speed`)** and open **Token & Speed HUD**.
 
 ### Option 2: Manual Global Installation
 
 **Windows (PowerShell, verified):**
 ```powershell
-git clone https://github.com/yuearc/antigravity-telemetry-hud.git
-cd antigravity-telemetry-hud
+git clone https://github.com/yuearc/antigravity-token-speed-hud.git
+cd antigravity-token-speed-hud
 .\install-global.ps1
 ```
 
 **macOS (upcoming verification):**
 ```bash
-git clone https://github.com/yuearc/antigravity-telemetry-hud.git
-cd antigravity-telemetry-hud
+git clone https://github.com/yuearc/antigravity-token-speed-hud.git
+cd antigravity-token-speed-hud
 chmod +x install-global.sh
 ./install-global.sh
 ```
 
 After running the script:
-1. Open **Customizations / Plugins** in Antigravity and ensure **Antigravity Telemetry HUD (`telemetry-hud`)** is enabled.
+1. Open **Customizations / Plugins** in Antigravity and ensure **Token & Speed (`token-speed`)** is enabled.
 2. Open the **`+`** menu in the right-hand Auxiliary Pane and select **Token & Speed HUD**.
 
 ### Option 3: Load as a Workspace Plugin
-1. Open the cloned `antigravity-telemetry-hud` directory directly as a Workspace in Antigravity.
-2. Enable **`telemetry-hud`** in the Plugins list.
+1. Open the cloned `antigravity-token-speed-hud` directory directly as a Workspace in Antigravity.
+2. Enable **`token-speed`** in the Plugins list.
 3. Open **Token & Speed HUD** from the Auxiliary Pane **`+`** menu.
 
 ---
@@ -116,7 +116,7 @@ After running the script:
 ## Privacy & Security
 
 - The sidecar backend reads only the local `transcript.jsonl` belonging to the active `conversationId`; no prompts, responses, or metrics ever leave your machine.
-- The `Stop` hook stores only a timestamp and termination reason enum under local `plugin_data/telemetry-hud/`, with no chat content persistence.
+- The `Stop` hook stores only a timestamp and termination reason enum under local `plugin_data/token-speed/`, with no chat content persistence.
 
 ## License
 

@@ -1,13 +1,13 @@
-# Antigravity Telemetry HUD (`telemetry-hud`)
+# Token & Speed (`token-speed`)
 
 [English](README.md) | **简体中文**
 
 一个为 **Google Antigravity** 打造的轻量级、零外部依赖实时性能与 Token 遥测 Sidecar 插件。基于高密度追踪面板与 Linear / Langfuse 卡片规范设计，实时展示当前会话的生成速率（`tok/s`）、Prefix Cache 命中率、上下文压力、以及按每句对话归组的链式工具调用详情。
 
 <p align="center">
-  <img src="docs/preview-dark.png" alt="Antigravity Telemetry HUD 深色模式效果" width="46%" />
+  <img src="docs/preview-dark.png" alt="Token & Speed 深色模式效果" width="46%" />
   &nbsp;&nbsp;
-  <img src="docs/preview-light.png" alt="Antigravity Telemetry HUD 浅色模式效果" width="46%" />
+  <img src="docs/preview-light.png" alt="Token & Speed 浅色模式效果" width="46%" />
 </p>
 
 ---
@@ -27,19 +27,19 @@
   - **语义化状态卡片**：卡片采用 3px 左侧状态锚条 + 分类语义徽章区分 `链式工具步` / `最终回复` / `等待确认` / `执行异常`，并细分读/检索、写/编辑、命令执行、联网检索工具类型。
 - **取消响应即时感知与严格单会话锁定**
   - 严格锁定当前打开的 Antigravity 对话（仅读取所属 `conversationId` 轨迹，不混读其他会话）。
-  - 通过原生 `Stop` Hook（[hooks.json](.agents/plugins/telemetry-hud/hooks.json)）+ `60s` 静默超时兜底，在用户取消回答（`USER_CANCELED`）或中断工具链后立即切换为 `CANCELLED` / `IDLE`，不会永久卡在「等待模型响应…」。
+  - 通过原生 `Stop` Hook（[hooks.json](.agents/plugins/token-speed/hooks.json)）+ `60s` 静默超时兜底，在用户取消回答（`USER_CANCELED`）或中断工具链后立即切换为 `CANCELLED` / `IDLE`，不会永久卡在「等待模型响应…」。
 - **100% 本地只读，零外传**
-  - 仅在本地读取 Antigravity 的 `transcript.jsonl` 与插件自身 `plugin_data/telemetry-hud/<conv>.json`，**不发起任何外网请求**、**不引入第三方 CDN 脚本/字体**。
+  - 仅在本地读取 Antigravity 的 `transcript.jsonl` 与插件自身 `plugin_data/token-speed/<conv>.json`，**不发起任何外网请求**、**不引入第三方 CDN 脚本/字体**。
 
 ---
 
 ## 目录结构
 
 ```text
-antigravity-telemetry-hud/
+antigravity-token-speed-hud/
 ├── .agents/
 │   └── plugins/
-│       └── telemetry-hud/
+│       └── token-speed/
 │           ├── plugin.json                # 插件清单
 │           ├── hooks.json                 # Antigravity Stop Hook 配置（即时捕获取消）
 │           ├── assets/
@@ -80,35 +80,35 @@ antigravity-telemetry-hud/
 不用手动折腾命令行——**直接把这个 GitHub 仓库地址发给你的 Antigravity**，让它自动帮你完成克隆与安装即可：
 
 ```text
-帮我安装这个 Antigravity 插件仓库：https://github.com/yuearc/antigravity-telemetry-hud
+帮我安装这个 Antigravity 插件仓库：https://github.com/yuearc/antigravity-token-speed-hud
 ```
 
-Antigravity 会自动拉取仓库并安装到 `~/.gemini/config/plugins/telemetry-hud/`，随后给出启用入口与侧边栏面板入口，点击启用 **Antigravity Telemetry HUD (`telemetry-hud`)** 即可使用。
+Antigravity 会自动拉取仓库并安装到 `~/.gemini/config/plugins/token-speed/`，随后给出启用入口与侧边栏面板入口，点击启用 **Token & Speed (`token-speed`)** 即可使用。
 
 ### 方式 2：手动运行脚本全局安装（所有项目可用）
 
 **Windows (PowerShell，已验证):**
 ```powershell
-git clone https://github.com/yuearc/antigravity-telemetry-hud.git
-cd antigravity-telemetry-hud
+git clone https://github.com/yuearc/antigravity-token-speed-hud.git
+cd antigravity-token-speed-hud
 .\install-global.ps1
 ```
 
 **macOS（待后续验证）:**
 ```bash
-git clone https://github.com/yuearc/antigravity-telemetry-hud.git
-cd antigravity-telemetry-hud
+git clone https://github.com/yuearc/antigravity-token-speed-hud.git
+cd antigravity-token-speed-hud
 chmod +x install-global.sh
 ./install-global.sh
 ```
 
 安装完成后：
-1. 在 Antigravity 中打开 **Customizations / Plugins** 页面，确认 **Antigravity Telemetry HUD (`telemetry-hud`)** 已开启。
+1. 在 Antigravity 中打开 **Customizations / Plugins** 页面，确认 **Token & Speed (`token-speed`)** 已开启。
 2. 点击右侧辅助面板（Auxiliary Pane）右上角 **`+`** 菜单，选择 **Token & Speed HUD**。
 
 ### 方式 3：作为单工作区插件试用
-1. 在 Antigravity 中直接将克隆下来的 `antigravity-telemetry-hud` 目录打开为当前工作区（Workspace）。
-2. 在插件列表中启用 **`telemetry-hud`**。
+1. 在 Antigravity 中直接将克隆下来的 `antigravity-token-speed-hud` 目录打开为当前工作区（Workspace）。
+2. 在插件列表中启用 **`token-speed`**。
 3. 从右侧辅助面板 **`+`** 菜单打开 **Token & Speed HUD**。
 
 ---
@@ -116,7 +116,7 @@ chmod +x install-global.sh
 ## 隐私与安全说明
 
 - 本插件后台仅读取当前 `conversationId` 对应的本地 `transcript.jsonl`，不上传任何对话文本或指标。
-- `Stop` Hook 脚本仅在本机 `plugin_data/telemetry-hud/` 下写入当前会话的停止时间戳与终止原因枚举，无任何持久化聊天正文行为。
+- `Stop` Hook 脚本仅在本机 `plugin_data/token-speed/` 下写入当前会话的停止时间戳与终止原因枚举，无任何持久化聊天正文行为。
 
 ## 开源协议
 

@@ -13,14 +13,14 @@ try {
         $d = Split-Path -Parent $tp
         while ($d -and ($d -ne (Split-Path -Parent $d))) {
           if ((Split-Path -Leaf $d) -eq 'brain') {
-            $dir = Join-Path (Join-Path (Split-Path -Parent $d) 'plugin_data') 'telemetry-hud'
+            $dir = Join-Path (Join-Path (Split-Path -Parent $d) 'plugin_data') 'token-speed'
             break
           }
           $d = Split-Path -Parent $d
         }
       }
       if (-not $dir) {
-        $dir = Join-Path (Join-Path (Join-Path $env:USERPROFILE '.gemini') 'antigravity') 'plugin_data\telemetry-hud'
+        $dir = Join-Path (Join-Path (Join-Path $env:USERPROFILE '.gemini') 'antigravity') 'plugin_data\token-speed'
       }
 
       [System.IO.Directory]::CreateDirectory($dir) | Out-Null
