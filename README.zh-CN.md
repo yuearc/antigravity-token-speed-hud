@@ -4,6 +4,12 @@
 
 一个为 **Google Antigravity** 打造的轻量级、零外部依赖实时性能与 Token 遥测 Sidecar 插件。基于高密度追踪面板与 Linear / Langfuse 卡片规范设计，实时展示当前会话的生成速率（`tok/s`）、Prefix Cache 命中率、上下文压力、以及按每句对话归组的链式工具调用详情。
 
+<p align="center">
+  <img src="docs/preview-dark.png" alt="Antigravity Telemetry HUD 深色模式效果" width="46%" />
+  &nbsp;&nbsp;
+  <img src="docs/preview-light.png" alt="Antigravity Telemetry HUD 浅色模式效果" width="46%" />
+</p>
+
 ---
 
 ## 核心特性
@@ -48,6 +54,9 @@ antigravity-telemetry-hud/
 │                   ├── index.html         # HUD 页面骨架
 │                   ├── styles.css         # 主题自适应（Host CSS Variables）样式
 │                   └── app.js             # Keyed DOM 同步、数字缓动与 Canvas 图表
+├── docs/
+│   ├── preview-dark.png                   # 深色模式效果截图
+│   └── preview-light.png                  # 浅色模式效果截图
 ├── install-global.ps1                     # Windows 全局安装脚本（已验证）
 ├── install-global.sh                      # macOS 全局安装脚本（待后续验证）
 ├── .gitignore

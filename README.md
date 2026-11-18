@@ -4,6 +4,12 @@
 
 A lightweight, zero-external-dependency real-time performance and token telemetry sidecar plugin for **Google Antigravity**. Built around high-density observability and Linear / Langfuse trace card conventions, it surfaces live generation throughput (`tok/s`), Prefix Cache hit rate, context pressure, and per-turn chained tool-call breakdowns.
 
+<p align="center">
+  <img src="docs/preview-dark.png" alt="Antigravity Telemetry HUD Dark Mode" width="46%" />
+  &nbsp;&nbsp;
+  <img src="docs/preview-light.png" alt="Antigravity Telemetry HUD Light Mode" width="46%" />
+</p>
+
 ---
 
 ## Key Features
@@ -48,6 +54,9 @@ antigravity-telemetry-hud/
 │                   ├── index.html         # HUD document shell
 │                   ├── styles.css         # Host-theme-adaptive CSS variables styling
 │                   └── app.js             # Keyed DOM reconciliation, numeric tweening & Canvas chart
+├── docs/
+│   ├── preview-dark.png                   # Dark mode screenshot
+│   └── preview-light.png                  # Light mode screenshot
 ├── install-global.ps1                     # Windows global installer (verified)
 ├── install-global.sh                      # macOS global installer (pending verification)
 ├── .gitignore
